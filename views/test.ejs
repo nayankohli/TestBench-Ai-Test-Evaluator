@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - <%= test.subject %> - <%= test.topic %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --text-color: #e5e7eb;
+            --text-muted: #9ca3af;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --input-focus: #60a5fa;
+            --border-radius: 8px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .test-container {
+            width: 800px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .test-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .test-header h1 {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .test-header .subject-topic {
+            opacity: 0.8;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        
+        .test-content {
+            padding: 30px;
+        }
+        
+        .question-container {
+            background-color: var(--input-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--input-border);
+            transition: all 0.3s ease;
+        }
+        
+        .question-container:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.1);
+        }
+        
+        .question {
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            display: block;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            font-size: 14px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        
+        .answer-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .submit-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .submit-btn {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .submit-btn i {
+            margin-right: 8px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: var(--input-border);
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .timer i {
+            margin-right: 5px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .test-container {
+                width: 100%;
+            }
+            
+            .test-header h1 {
+                font-size: 20px;
+            }
+            
+            .question-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Test Assessment</h1>
+            <div class="subject-topic"><%= test.subject %> - <%= test.topic %></div>
+            <div class="timer">
+                <i class="fas fa-clock"></i>
+                <span id="timer-display">Time remaining</span>
+            </div>
+        </div>
+        
+        <div class="test-content">
+            <div class="progress-bar">
+                <div class="progress" id="progress-indicator"></div>
+            </div>
+            
+            <form method="POST" action="/test/<%= test.code %>/submit" id="test-form">
+                <% questions.forEach((question, index) => { %>
+                    <div class="question-container">
+                        <div class="question">
+                            <span class="question-text">
+                                <span class="question-number"><%= index + 1 %></span>
+                                <%= question %>
+                            </span>
+                            <input type="text" 
+                                   class="answer-input" 
+                                   id="question<%= index + 1 %>" 
+                                   name="question<%= index + 1 %>" 
+                                   required 
+                                   placeholder="Type your answer here"
+                                   oninput="updateProgress()">
+                        </div>
+                    </div>
+                <% }) %>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Test
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Update progress bar as user fills in answers
+        function updateProgress() {
+            const totalQuestions = document.querySelectorAll('.question-container').length;
+            const answeredQuestions = document.querySelectorAll('.answer-input:valid').length;
+            const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+            
+            document.getElementById('progress-indicator').style.width = progressPercentage + '%';
+        }
+        
+        // Initialize progress on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            
+            // Optional: Add timer functionality
+            // This is just a placeholder - you can implement actual time limits if needed
+            let timeLeft = 60; // minutes
+            const timerDisplay = document.getElementById('timer-display');
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft);
+                const seconds = Math.floor((timeLeft - minutes) * 60);
+                timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                
+                if (timeLeft > 0) {
+                    timeLeft -= 1/60; // Subtract 1 second
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    // Time's up - you can auto-submit the form or show a message
+                    timerDisplay.textContent = "Time's up!";
+                    // document.getElementById('test-form').submit();
+                }
+            }
+            
+            // Uncomment to enable the timer
+            // updateTimer();
+        });
+    </script>
+</body>
+</html>

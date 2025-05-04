@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --text-color: #e5e7eb;
+            --text-muted: #9ca3af;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --card-border: rgba(59, 130, 246, 0.5);
+            --input-focus: #60a5fa;
+            --border-radius: 8px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+            --header-bg: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: var(--header-bg);
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .container {
+            padding: 0 30px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-title i {
+            color: var(--primary-color);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            border-top: 3px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0) 100%);
+            z-index: 0;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p i {
+            width: 16px;
+            color: var(--primary-color);
+        }
+
+        .card-divider {
+            height: 1px;
+            background-color: var(--input-border);
+            margin: 15px 0;
+            opacity: 0.6;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .no-tests {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .no-tests i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .no-tests p {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .status-completed {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 0 15px 30px;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../public/navbar.html') %>
+    
+    <div class="dashboard-header">
+        <h1>Student Dashboard</h1>
+        <p>View and manage your available tests</p>
+    </div>
+    
+    <div class="container">
+        <div class="dashboard-title">
+            <i class="fas fa-clipboard-list"></i> Available Tests
+        </div>
+        
+        <div class="cards">
+            <% if (data && data.length > 0) { %>
+                <% data.forEach(test => { %>
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-icon">
+                                <i class="fas fa-book"></i>
+                            </span>
+                            <h2><%= test.subject %></h2>
+                            
+                            <p>
+                                <i class="fas fa-bookmark"></i>
+                                Topic: <%= test.topic %>
+                            </p>
+                            
+                            <p>
+                                <i class="fas fa-clock"></i>
+                                Created: <%= new Date(test.createdAt).toLocaleString() %>
+                            </p>
+                            
+                            <p>
+                                <i class="fas fa-info-circle"></i>
+                                Status: 
+                                <span class="status-badge status-<%= test.status.toLowerCase() %>">
+                                    <%= test.status %>
+                                </span>
+                            </p>
+                            
+                            <div class="card-divider"></div>
+                            
+                            <a href="/test/<%= test.code %>" class="btn">
+                                <i class="fas fa-pencil-alt"></i> Take Test
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="no-tests">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>No active tests available at the moment.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent navigation
+                    const card = button.closest('.card'); // Get the parent card of the button
+                    
+                    // Add a fade-out animation
+                    if (card) {
+                        card.style.transition = 'opacity 0.5s ease';
+                        card.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                            // Navigate to the test page
+                            window.location.href = button.getAttribute('href');
+                        }, 500);
+                    } else {
+                        // If card not found, just navigate
+                        window.location.href = button.getAttribute('href');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

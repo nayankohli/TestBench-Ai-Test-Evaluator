@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --text-color: #e5e7eb;
+            --text-muted: #9ca3af;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --input-focus: #60a5fa;
+            --border-radius: 8px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+            --table-even-row: #283548;
+            --table-hover: #2d3a4f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .scores-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        
+        .content {
+            background-color: var(--card-bg);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        .empty-state p {
+            font-size: 18px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--input-border);
+        }
+        
+        th {
+            background-color: var(--input-bg);
+            color: var(--primary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--table-even-row);
+        }
+        
+        tr:hover {
+            background-color: var(--table-hover);
+        }
+        
+        .email-cell {
+            font-weight: 500;
+        }
+        
+        .code-cell {
+            font-family: monospace;
+            color: var(--primary-color);
+        }
+        
+        .marks-cell {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .high-score {
+            color: #10b981;
+        }
+        
+        .medium-score {
+            color: #f59e0b;
+        }
+        
+        .low-score {
+            color: #ef4444;
+        }
+        
+        .qa-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .qa-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--input-border);
+        }
+        
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .question-label {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            font-size: 12px;
+        }
+        
+        .question-text {
+            display: block;
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        
+        .answer-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        .answer-text {
+            font-style: italic;
+        }
+        
+        .responsive-table {
+            overflow-x: auto;
+        }
+        
+        @media screen and (max-width: 768px) {
+            th, td {
+                padding: 10px;
+            }
+            
+            th {
+                font-size: 12px;
+            }
+            
+            td {
+                font-size: 12px;
+            }
+            
+            .question-text {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../public/navbar.html') %>
+    
+    <div class="scores-container">
+        <div class="header">
+            <h1>Test Scores</h1>
+            <p>Review all student submissions and performance</p>
+        </div>
+        
+        <div class="content">
+            <% if (submissions.length === 0) { %>
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>No submissions found for this test.</p>
+                </div>
+            <% } else { %>
+                <div class="responsive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-envelope"></i> Email</th>
+                                <th><i class="fas fa-hashtag"></i> Test Code</th>
+                                <th><i class="fas fa-question-circle"></i> Questions & Answers</th>
+                                <th><i class="fas fa-chart-bar"></i> Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% submissions.forEach(submission => { %>
+                                <tr>
+                                    <td class="email-cell"><%= submission.email %></td>
+                                    <td class="code-cell"><%= submission.code %></td>
+                                    <td>
+                                        <ul class="qa-list">
+                                            <% submission.question.forEach((question, index) => { %>
+                                                <li class="qa-item">
+                                                    <span class="question-label">Q<%= index + 1 %></span>
+                                                    <span class="question-text"><%= question %></span>
+                                                    <span class="answer-label">Answer:</span>
+                                                    <span class="answer-text"><%= submission.answer[index] %></span>
+                                                </li>
+                                            <% }) %>
+                                        </ul>
+                                    </td>
+                                    <td class="marks-cell 
+                                        <% if (submission.marks >= 80) { %>high-score<% } 
+                                           else if (submission.marks >= 50) { %>medium-score<% } 
+                                           else { %>low-score<% } %>">
+                                        <%= submission.marks %>%
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        // Optional script to add additional functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // You could add sorting functionality, filtering, or export options here
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --text-color: #e5e7eb;
+            --text-muted: #9ca3af;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --input-focus: #60a5fa;
+            --border-radius: 8px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .test-container {
+            width: 600px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .test-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .test-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .test-header p {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+            transition: color 0.3s ease, transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            color: var(--primary-hover);
+            transform: scale(1.1);
+        }
+        
+        .test-form {
+            padding: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            font-size: 14px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: var(--text-muted);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 15px 0;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--input-border);
+        }
+        
+        .divider span {
+            position: relative;
+            background-color: var(--card-bg);
+            padding: 0 15px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .questions-container {
+            margin-top: 20px;
+        }
+        
+        .question-input {
+            background-color: var(--input-bg);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--input-border);
+            transition: all 0.3s ease;
+        }
+        
+        .question-input:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.1);
+        }
+        
+        @media screen and (max-width: 640px) {
+            .test-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Create Test</h1>
+            <p>Design a new assessment for your students</p>
+            <button class="back-button" onclick="goBack()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="test-form">
+            <form id="createTestForm" method="post" action="/teacher/createTest">
+                <div class="input-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Enter subject name" required>
+                    <i class="fas fa-book"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="topic">Topic</label>
+                    <input type="text" id="topic" name="topic" placeholder="Enter topic name" required>
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="numberOfQuestions">Number of Questions</label>
+                    <input type="number" id="numberOfQuestions" name="numberOfQuestions" placeholder="Enter number of questions" required min="1">
+                    <i class="fas fa-list-ol"></i>
+                </div>
+                
+                <button type="button" id="createQuestionsButton" class="btn" onclick="generateQuestionInputs()">
+                    <i class="fas fa-plus-circle"></i> Generate Question Fields
+                </button>
+                
+                <div class="questions-container" id="questionsContainer">
+                    <!-- Question inputs will be generated here -->
+                </div>
+                
+                <div class="divider">
+                    <span>Review & Submit</span>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i> Create Test
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function generateQuestionInputs() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = ''; // Clear previous inputs
+            
+            const numberOfQuestions = document.getElementById('numberOfQuestions').value;
+            if (numberOfQuestions <= 0) {
+                alert("Please enter a valid number of questions.");
+                return;
+            }
+            
+            for (let i = 1; i <= numberOfQuestions; i++) {
+                const questionInput = document.createElement('div');
+                questionInput.classList.add('question-input');
+                
+                const label = document.createElement('label');
+                label.textContent = `Question ${i}:`;
+                questionInput.appendChild(label);
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = `question${i}`;
+                input.id = `question${i}`;
+                input.placeholder = `Enter question ${i}`;
+                input.required = true;
+                questionInput.appendChild(input);
+                
+                container.appendChild(questionInput);
+            }
+            
+            // Hide the button after clicking
+            document.getElementById('createQuestionsButton').style.display = 'none';
+            
+            // Scroll to the first question input
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+        
+        function showButton() {
+            // Show the button if the input changes
+            document.getElementById('createQuestionsButton').style.display = 'block';
+        }
+        
+        document.getElementById("createTestForm").onsubmit = function(event) {
+            const numberOfQuestions = document.getElementById('numberOfQuestions').value;
+            if (numberOfQuestions <= 0) {
+                event.preventDefault();
+                alert("Please enter a valid number of questions.");
+            }
+        }
+        
+        // Function to redirect to teacherDashboard
+        function goBack() {
+            window.location.href = "/teacher/dashboard"; // Change the URL as per your routing
+        }
+        
+        // Add event listener to input field to show button on input change
+        const numberInput = document.getElementById('numberOfQuestions');
+        numberInput.addEventListener('input', showButton);
+    </script>
+</body>
+</html>

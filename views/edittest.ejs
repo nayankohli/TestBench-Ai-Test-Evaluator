@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --primary-color: #3b82f6;
+            --primary-hover: #60a5fa;
+            --text-color: #e5e7eb;
+            --text-muted: #9ca3af;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --input-focus: #60a5fa;
+            --border-radius: 8px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .edit-container {
+            width: 800px;
+            max-width: 100%;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .edit-header {
+            background: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .edit-header h2 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .edit-header p {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        
+        .test-info {
+            background-color: rgba(55, 65, 81, 0.5);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--input-border);
+        }
+        
+        .test-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .edit-form {
+            padding: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            font-size: 14px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus, 
+        .input-group select:focus, 
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: var(--text-muted);
+        }
+        
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .question-group {
+            background-color: var(--input-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--input-border);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .update-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .update-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        @media screen and (max-width: 850px) {
+            .edit-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <div class="edit-header">
+            <h2>Edit Test</h2>
+            <p>Update your test details</p>
+        </div>
+        
+        <div class="test-info">
+            <p><i class="fas fa-code"></i> <strong>Test Code:</strong> <%= test.code %></p>
+            <p><i class="fas fa-circle <%= test.status === 'active' ? 'text-green-500' : 'text-red-500' %>"></i> <strong>Status:</strong> <%= test.status %></p>
+        </div>
+
+        <div class="edit-form">
+            <form action="/edit/<%= test.code %>" method="POST">
+                <div class="input-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" value="<%= test.subject %>" required>
+                    <i class="fas fa-book"></i>
+                </div>
+
+                <div class="input-group">
+                    <label for="topic">Topic</label>
+                    <input type="text" id="topic" name="topic" value="<%= test.topic %>" required>
+                    <i class="fas fa-tag"></i>
+                </div>
+
+                <div class="input-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="active" <%= test.status === 'active' ? 'selected' : '' %>>Active</option>
+                        <option value="inactive" <%= test.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+                    </select>
+                    <i class="fas fa-toggle-on"></i>
+                </div>
+
+                <div class="input-group">
+                    <label>Questions</label>
+                    <div class="questions-container">
+                        <% test.questions.forEach((question, index) => { %>
+                            <div class="question-group">
+                                <div class="question-header">
+                                    <label for="question<%= index %>">Question <%= index + 1 %></label>
+                                </div>
+                                <textarea 
+                                    id="question<%= index %>" 
+                                    name="questions[]" 
+                                    required><%= question %></textarea>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <button type="submit" class="update-btn">Update Test</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

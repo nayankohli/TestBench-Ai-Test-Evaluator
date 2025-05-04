@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+</head>
+<style>
+    /* Container styles */
+.container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Back button styles */
+.back-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #333;
+}
+
+/* Heading styles */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Label styles */
+label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Input styles */
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+/* Checkbox container styles */
+.checkbox-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+/* Checkbox label styles */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+/* Checkbox styles */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Input group styles */
+.input-group {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+/* Button container styles */
+.button-container {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Submit button styles */
+button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Disabled input styles */
+input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .checkbox-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+</style>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="goBack()">&#x2715;</button>
+
+        <h1>Create Test</h1>
+        <form id="createTestForm" action="/aiTest" method="post" onsubmit="showLoading(event)">
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" required>
+
+            <label for="topic">Topic:</label>
+            <input type="text" id="topic" name="topic" required>
+
+            <div class="checkbox-container">
+                <div class="checkbox-label">
+                    <input type="checkbox" name="marker" id="1-marker" class="markers" onclick="toggleInput('1-marker', '1-marker-input')">
+                    <span>1-marker</span>
+                </div>
+
+                <div class="checkbox-label">
+                    <input type="checkbox" name="marker" id="2-marker" class="markers" onclick="toggleInput('2-marker', '2-marker-input')">
+                    <span>2-marker</span>
+                </div>
+
+                <div class="checkbox-label">
+                    <input type="checkbox" name="marker" id="5-marker" class="markers"  onclick="toggleInput('5-marker', '5-marker-input')">
+                    <span>5-marker</span>
+                </div>
+            </div>
+
+            <div class="input-group" id="1-marker-input">
+                <label for="1-marker-questions">Number of 1-marker questions:</label>
+                <input type="number" id="1-marker-questions" name="1-marker-questions" value="0" >
+            </div>
+
+            <div class="input-group" id="2-marker-input">
+                <label for="2-marker-questions">Number of 2-marker questions:</label>
+                <input type="number" id="2-marker-questions" name="2-marker-questions" value="0" >
+            </div>
+
+            <div class="input-group" id="5-marker-input">
+                <label for="5-marker-questions">Number of 5-marker questions:</label>
+                <input type="number" id="5-marker-questions" name="5-marker-questions" value="0" >
+            </div>
+            <div class="button-container">
+                <button type="submit">Create Test</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loader"></div>
+            <div class="loading-text" id="loadingText"></div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+        "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+        }
+    </script>
+    <script>
+        // Function to navigate back to teacher dashboard
+function goBack() {
+    window.location.href = '/teacherdashboard';
+}
+
+// Function to handle loading screen and form submission
+function showLoading(event) {
+    event.preventDefault();
+    
+    // Show loading screen
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingText = document.getElementById('loadingText');
+    loadingScreen.style.display = 'flex';
+    
+    // Initialize loading text
+    const loadingMessages = [
+        'Generating questions...',
+        'Creating your test...',
+        'Almost there...',
+        'Finalizing test paper...'
+    ];
+    
+    let currentIndex = 0;
+    loadingText.textContent = loadingMessages[0];
+    
+    // Rotate through loading messages
+    const messageInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % loadingMessages.length;
+        loadingText.textContent = loadingMessages[currentIndex];
+    }, 2000);
+    
+    // Submit the form without waiting for loading screen
+    const form = document.getElementById('createTestForm');
+    setTimeout(() => {
+        form.submit();
+    }, 0);
+}
+
+// Rest of the functions remain the same...
+    </script>
+</body>
+
+</html>
