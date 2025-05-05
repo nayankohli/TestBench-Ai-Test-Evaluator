@@ -176,6 +176,15 @@
             margin-right: 8px;
         }
 
+        .btn-scores {
+            background-color: #10b981;
+        }
+
+        .btn-scores:hover {
+            background-color: #34d399;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
         .no-tests {
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
@@ -197,7 +206,6 @@
             color: var(--text-muted);
         }
 
-        /* Status badges */
         .status-badge {
             display: inline-block;
             padding: 4px 10px;
@@ -237,7 +245,7 @@
     <%- include('../public/navbar.html') %>
     
     <div class="dashboard-header">
-        <h1>Student Dashboard</h1>
+        <h1>Welcome Back, <%=user.name%></h1>
         <p>View and manage your available tests</p>
     </div>
     
@@ -276,9 +284,15 @@
                             
                             <div class="card-divider"></div>
                             
-                            <a href="/test/<%= test.code %>" class="btn">
-                                <i class="fas fa-pencil-alt"></i> Take Test
-                            </a>
+                            <% if (test.completed) { %>
+                                <a href="/student/scores" class="btn btn-scores">
+                                    <i class="fas fa-chart-bar"></i> View Scores
+                                </a>
+                            <% } else { %>
+                                <a href="/test/<%= test.code %>" class="btn">
+                                    <i class="fas fa-pencil-alt"></i> Take Test
+                                </a>
+                            <% } %>
                         </div>
                     </div>
                 <% }) %>
@@ -297,21 +311,17 @@
 
             buttons.forEach(button => {
                 button.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent navigation
-                    const card = button.closest('.card'); // Get the parent card of the button
-                    
-                    // Add a fade-out animation
+                    event.preventDefault(); 
+                    const card = button.closest('.card'); 
                     if (card) {
                         card.style.transition = 'opacity 0.5s ease';
                         card.style.opacity = '0';
                         
                         setTimeout(() => {
                             card.style.display = 'none';
-                            // Navigate to the test page
                             window.location.href = button.getAttribute('href');
                         }, 500);
                     } else {
-                        // If card not found, just navigate
                         window.location.href = button.getAttribute('href');
                     }
                 });

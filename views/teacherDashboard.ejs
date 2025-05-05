@@ -1,322 +1,706 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --bg-color: #111827;
-            --card-bg: #1f2937;
-            --primary-color: #3b82f6;
-            --primary-hover: #60a5fa;
-            --text-color: #e5e7eb;
-            --text-muted: #9ca3af;
-            --input-bg: #374151;
-            --input-border: #4b5563;
-            --card-border: rgba(59, 130, 246, 0.5);
-            --input-focus: #60a5fa;
-            --border-radius: 8px;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
-            --header-bg: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-        }
+      :root {
+        --bg-color: #111827;
+        --card-bg: #1f2937;
+        --primary-color: #3b82f6;
+        --primary-hover: #60a5fa;
+        --text-color: #e5e7eb;
+        --text-muted: #9ca3af;
+        --input-bg: #374151;
+        --input-border: #4b5563;
+        --card-border: rgba(59, 130, 246, 0.5);
+        --input-focus: #60a5fa;
+        --border-radius: 8px;
+        --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+          0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        --header-bg: linear-gradient(135deg, #374151 0%, #1e3a8a 100%);
+        --delete-color: #ef4444;
+        --delete-hover: #dc2626;
+        --activate-color: #10b981;
+        --activate-hover: #059669;
+      }
 
-        .dashboard-header {
-            background: var(--header-bg);
-            padding: 30px 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        .dashboard-header h1 {
-            font-weight: 600;
-            font-size: 28px;
-            color: var(--text-color);
-            margin-bottom: 5px;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        min-height: 100vh;
+      }
 
-        .dashboard-header p {
-            color: var(--text-muted);
-            font-size: 16px;
-            opacity: 0.9;
-        }
+      .dashboard-header {
+        background: var(--header-bg);
+        padding: 30px 20px;
+        text-align: center;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
 
+      .dashboard-header h1 {
+        font-weight: 600;
+        font-size: 28px;
+        color: var(--text-color);
+        margin-bottom: 5px;
+      }
+
+      .dashboard-header p {
+        color: var(--text-muted);
+        font-size: 16px;
+        opacity: 0.9;
+      }
+
+      .container {
+        padding: 0 30px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .search-container {
+        max-width: 800px;
+        margin: 0 auto 30px;
+      }
+
+      .search-bar {
+        background-color: var(--input-bg);
+        border-radius: var(--border-radius);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border: 1px solid var(--input-border);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .search-bar input {
+        background: transparent;
+        border: none;
+        color: var(--text-color);
+        padding: 4px 8px;
+        width: 100%;
+        outline: none;
+        font-size: 16px;
+      }
+
+      .search-bar i {
+        color: var(--text-muted);
+        font-size: 18px;
+      }
+
+      .dashboard-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dashboard-title i {
+        color: var(--primary-color);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+      }
+
+      .card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 25px;
+        border-top: 3px solid var(--primary-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.05) 0%,
+          rgba(59, 130, 246, 0) 100%
+        );
+        z-index: 0;
+      }
+
+      .card-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .card-icon {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+
+      .card h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card p i {
+        width: 16px;
+        color: var(--primary-color);
+      }
+
+      .card-divider {
+        height: 1px;
+        background-color: var(--input-border);
+        margin: 15px 0;
+        opacity: 0.6;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.35);
+      }
+
+      .card-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .btn-activate {
+        background-color: var(--activate-color);
+      }
+
+      .btn-activate:hover {
+        background-color: var(--activate-hover);
+      }
+
+      .btn-warning {
+        background-color: #bc5ce8;
+        color: white;
+      }
+
+      .btn-warning:hover {
+        background-color: #8b1bbf;
+      }
+
+      .btn-delete {
+        background-color: var(--delete-color);
+      }
+
+      .btn-delete:hover {
+        background-color: var(--delete-hover);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .status-active {
+        background-color: rgba(16, 185, 129, 0.2);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .status-inactive {
+        background-color: rgba(107, 114, 128, 0.2);
+        color: #9ca3af;
+        border: 1px solid rgba(107, 114, 128, 0.3);
+      }
+
+      .status-badge i {
+        margin-right: 6px;
+      }
+
+      .floating-btn {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 80px;
+        height: 80px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .floating-btn i {
+        font-size: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .floating-btn:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .floating-btn.expanded {
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .floating-btn.expanded i.fa-plus {
+        transform: rotate(45deg);
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 18px;
+      }
+
+      .popup-options {
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        width: 90%;
+      }
+
+      .floating-btn.expanded .popup-options {
+        display: flex;
+      }
+
+      .popup-option {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 12px;
+        border-radius: var(--border-radius);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .popup-option:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 2000;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+      }
+
+      .notification.success {
+        background-color: #10b981;
+      }
+
+      .notification.error {
+        background-color: #ef4444;
+      }
+
+      .no-tests {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        margin-top: 20px;
+        grid-column: 1 / -1;
+      }
+
+      .no-tests i {
+        font-size: 48px;
+        color: var(--text-muted);
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .no-tests p {
+        font-size: 16px;
+        color: var(--text-muted);
+      }
+
+      @media screen and (max-width: 768px) {
         .container {
-            padding: 0 30px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .dashboard-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dashboard-title i {
-            color: var(--primary-color);
+          padding: 0 15px 30px;
         }
 
         .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+          grid-template-columns: 1fr;
         }
 
-        .card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            border-top: 3px solid var(--primary-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .floating-btn {
+          bottom: 30px;
+          right: 30px;
+          width: 50px;
+          height: 50px;
         }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0) 100%);
-            z-index: 0;
-        }
-
-        .card-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-icon {
-            font-size: 24px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-
-        .card h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card p i {
-            width: 16px;
-            color: var(--primary-color);
-        }
-
-        .card-divider {
-            height: 1px;
-            background-color: var(--input-border);
-            margin: 15px 0;
-            opacity: 0.6;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.35);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: var(--border-radius);
-            transition: all 0.3s ease;
-            text-align: center;
-            margin-top: 15px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .no-tests {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            margin-top: 20px;
-        }
-
-        .no-tests i {
-            font-size: 48px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .no-tests p {
-            font-size: 16px;
-            color: var(--text-muted);
-        }
-
-        /* Status badges */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 5px;
-        }
-
-        .status-active {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-
-        .status-pending {
-            background-color: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        .status-completed {
-            background-color: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-        }
-
-        @media screen and (max-width: 768px) {
-            .container {
-                padding: 0 15px 30px;
-            }
-            
-            .cards {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('../public/navbar.html') %>
-    
+
     <div class="dashboard-header">
-        <h1>Student Dashboard</h1>
-        <p>View and manage your available tests</p>
+      <h1>Welcome Back, <%= user.name %></h1>
+      <p>View and manage your created tests</p>
     </div>
-    
+
     <div class="container">
-        <div class="dashboard-title">
-            <i class="fas fa-clipboard-list"></i> Available Tests
+      <div class="search-container">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search tests..." id="searchInput" />
         </div>
-        
-        <div class="cards">
-            <% if (data && data.length > 0) { %>
-                <% data.forEach(test => { %>
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="card-icon">
-                                <i class="fas fa-book"></i>
-                            </span>
-                            <h2><%= test.subject %></h2>
-                            
-                            <p>
-                                <i class="fas fa-bookmark"></i>
-                                Topic: <%= test.topic %>
-                            </p>
-                            
-                            <p>
-                                <i class="fas fa-clock"></i>
-                                Created: <%= new Date(test.createdAt).toLocaleString() %>
-                            </p>
-                            
-                            <p>
-                                <i class="fas fa-info-circle"></i>
-                                Status: 
-                                <span class="status-badge status-<%= test.status.toLowerCase() %>">
-                                    <%= test.status %>
-                                </span>
-                            </p>
-                            
-                            <div class="card-divider"></div>
-                            
-                            <a href="/test/<%= test.code %>" class="btn">
-                                <i class="fas fa-pencil-alt"></i> Take Test
-                            </a>
-                        </div>
-                    </div>
-                <% }) %>
-            <% } else { %>
-                <div class="no-tests">
-                    <i class="fas fa-clipboard-check"></i>
-                    <p>No active tests available at the moment.</p>
-                </div>
-            <% } %>
+      </div>
+
+      <div class="dashboard-title">
+        <i class="fas fa-clipboard-list"></i> Your Tests
+      </div>
+
+      <div class="cards">
+        <% if (data && data.length > 0) { %> <% data.forEach(test => { %>
+        <div class="card" id="test-card-<%= test.code %>">
+          <div class="card-content">
+            <span class="card-icon">
+              <i class="fas fa-book"></i>
+            </span>
+
+            <h2><%= test.subject %>: <%= test.topic %></h2>
+
+            <div
+              class="status-badge <%= test.status === 'Active' ? 'status-active' : 'status-inactive' %>"
+            >
+              <i
+                class="fas <%= test.status === 'Active' ? 'fa-circle-check' : 'fa-circle-pause' %>"
+              ></i>
+              <%= test.status === 'Active' ? 'Active' : 'Inactive' %>
+            </div>
+
+            <p>
+              <i class="fas fa-bookmark"></i>
+              Subject: <%= test.subject %>
+            </p>
+
+            <p>
+              <i class="fas fa-tag"></i>
+              Topic: <%= test.topic %>
+            </p>
+
+            <p>
+              <i class="fas fa-hashtag"></i>
+              Code: <%= test.code %>
+            </p>
+
+            <p>
+              <i class="far fa-calendar-alt"></i>
+              Created: <%= test.createdAt.toLocaleString() %>
+            </p>
+
+            <div class="card-divider"></div>
+
+            <div class="card-buttons">
+              <button
+                onclick="viewScore('<%= test.code %>')"
+                class="btn btn-primary"
+              >
+                <i class="fas fa-chart-bar"></i> View Scores
+              </button>
+
+              <button
+                onclick="edit('<%= test.code %>')"
+                class="btn btn-primary"
+              >
+                <i class="fas fa-edit"></i> Edit
+              </button>
+
+              <% if (test.status === 'Active') { %>
+              <button
+                onclick="deactivate('<%= test.code %>')"
+                class="btn btn-warning"
+              >
+                <i class="fas fa-pause"></i> Deactivate
+              </button>
+              <% } else { %>
+              <button
+                onclick="activate('<%= test.code %>')"
+                class="btn btn-activate"
+              >
+                <i class="fas fa-play"></i> Activate
+              </button>
+              <% } %>
+
+              <button
+                onclick="deleteTest('<%= test.code %>')"
+                class="btn btn-delete"
+              >
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </div>
+          </div>
         </div>
+        <% }) %> <% } else { %>
+        <div class="no-tests">
+          <i class="fas fa-clipboard-check"></i>
+          <p>
+            You haven't created any tests yet. Click the + button to create your
+            first test.
+          </p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="floating-btn" id="floatingBtn">
+      <i class="fas fa-plus"></i>
+      <div class="popup-options">
+        <div class="popup-option" id="createTest">
+          <i class="fas fa-file-alt"></i>
+          <span>Create Own Test</span>
+        </div>
+        <div class="popup-option" id="aiTest">
+          <i class="fas fa-robot"></i>
+          <span>Create with AI</span>
+        </div>
+      </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const buttons = document.querySelectorAll('.btn');
+      const floatingBtn = document.getElementById("floatingBtn");
+      const searchInput = document.getElementById("searchInput");
 
-            buttons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.preventDefault(); // Prevent navigation
-                    const card = button.closest('.card'); // Get the parent card of the button
-                    
-                    // Add a fade-out animation
-                    if (card) {
-                        card.style.transition = 'opacity 0.5s ease';
-                        card.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                            // Navigate to the test page
-                            window.location.href = button.getAttribute('href');
-                        }, 500);
-                    } else {
-                        // If card not found, just navigate
-                        window.location.href = button.getAttribute('href');
-                    }
-                });
-            });
+      searchInput.addEventListener("input", function () {
+        const searchTerm = this.value.toLowerCase();
+        const cards = document.querySelectorAll(".card");
+
+        cards.forEach((card) => {
+          const content = card.textContent.toLowerCase();
+          if (content.includes(searchTerm)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
         });
+      });
+
+      floatingBtn.addEventListener("click", (event) => {
+        floatingBtn.classList.toggle("expanded");
+        event.stopPropagation();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!floatingBtn.contains(event.target)) {
+          floatingBtn.classList.remove("expanded");
+        }
+      });
+
+      function viewScore(code) {
+        window.location.href = `/teacher/scores/${code}`;
+      }
+
+      function edit(code) {
+        window.location.href = `/teacher/edit/${code}`;
+      }
+
+      function activate(testCode) {
+        if (confirm("Are you sure you want to activate this test?")) {
+          fetch(`/teacher/activate/${testCode}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": getCsrfToken(),
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.reload();
+              } else {
+                alert("Failed to activate the test. Please try again.");
+              }
+            })
+            .catch((error) => {
+              console.error("Error activating test:", error);
+              alert("An error occurred while activating the test.");
+            });
+        }
+      }
+
+      function deactivate(testCode) {
+        if (confirm("Are you sure you want to deactivate this test?")) {
+          fetch(`/teacher/inactive/${testCode}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": getCsrfToken(),
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.reload();
+              } else {
+                alert("Failed to deactivate the test. Please try again.");
+              }
+            })
+            .catch((error) => {
+              console.error("Error deactivating test:", error);
+              alert("An error occurred while deactivating the test.");
+            });
+        }
+      }
+
+      function getCsrfToken() {
+        return document
+          .querySelector('meta[name="csrf-token"]')
+          ?.getAttribute("content");
+      }
+
+      function deleteTest(code) {
+        if (confirm("Are you sure you want to delete this test?")) {
+          fetch(`/teacher/delete/${code}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                showNotification("Test deleted successfully!", "success");
+
+                const card = document.getElementById(`test-card-${code}`);
+                card.style.opacity = "0";
+                card.style.transform = "scale(0.8)";
+
+                setTimeout(() => {
+                  card.remove();
+                }, 300);
+              } else {
+                showNotification("Failed to delete the test.", "error");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showNotification("Error deleting the test.", "error");
+            });
+        }
+      }
+
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+                <i class="fas ${
+                  type === "success"
+                    ? "fa-check-circle"
+                    : "fa-exclamation-circle"
+                }"></i>
+                <span>${message}</span>
+            `;
+
+        document.body.appendChild(notification);
+        setTimeout(() => {
+          notification.style.opacity = "1";
+          notification.style.transform = "translateY(0)";
+        }, 10);
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          notification.style.transform = "translateY(-20px)";
+
+          setTimeout(() => {
+            notification.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      document.getElementById("createTest").addEventListener("click", () => {
+        window.location.href = "/teacher/createTest";
+      });
+
+      document.getElementById("aiTest").addEventListener("click", () => {
+        window.location.href = "/teacher/aitest";
+      });
     </script>
-</body>
+  </body>
 </html>

@@ -34,7 +34,6 @@
             min-height: 100vh;
         }
         
-        /* Navbar Styles */
         .navbar {
             background: linear-gradient(90deg, #1f2937 0%, #1e3a8a 100%);
             height: var(--nav-height);
@@ -50,6 +49,7 @@
         .navbar-logo {
             display: flex;
             align-items: center;
+            gap:7px;
         }
         
         .navbar-logo img {
@@ -59,6 +59,13 @@
             transition: transform 0.3s ease;
         }
         
+        .navbar-logo h1{
+            font-weight: 600;
+            font-size: 28px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
         .navbar-logo img:hover {
             transform: scale(1.05);
         }
@@ -95,7 +102,6 @@
             font-size: 16px;
         }
         
-        /* Mobile menu button */
         .menu-button {
             display: none;
             background: none;
@@ -110,7 +116,6 @@
             color: var(--primary-hover);
         }
         
-        /* Responsive Styles */
         @media screen and (max-width: 768px) {
             .navbar {
                 padding: 0 20px;
@@ -146,23 +151,24 @@
     </style>
 </head>
 <body>
-    <!-- Navbar Section -->
     <div class="navbar">
-        <!-- Logo -->
         <div class="navbar-logo">
-            <img src="/logo-no-background.png" alt="Logo" />
+            <img src="/uploads/TestBench-Logo.png" alt="Logo" />
+            <H1>TestBench</H1>
         </div>
-
-        <!-- Mobile Menu Button -->
         <button class="menu-button" id="menuButton">
             <i class="fas fa-bars"></i>
         </button>
-
-        <!-- Links -->
         <div class="navbar-links" id="navLinks">
             <a href="/" class="active">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
+           <% if(typeof user==="undefined" || user.role!="teacher"){%>
+            <a href="/student/scores" class="active">
+                <i class="fas fa-chart-bar"></i> My Scores
+            </a>
+            <%}%>
+            
             <a href="/logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -170,7 +176,6 @@
     </div>
 
     <script>
-        // Mobile menu toggle functionality
         const menuButton = document.getElementById('menuButton');
         const navLinks = document.getElementById('navLinks');
         

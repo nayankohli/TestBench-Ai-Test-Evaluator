@@ -5,22 +5,18 @@ const { User } = require('../models');
 const { hashPassword } = require('../utils/helpers');
 const { redirectIfAuthenticated } = require('../middleware/auth');
 
-// Login page
 router.get("/login", redirectIfAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public", "login.html"));
 });
 
-// Signup page - Fixed route to show signup page
 router.get("/signup", redirectIfAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public", "signup.html"));
 });
 
-// Root redirects to login
 router.get("/", redirectIfAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public", "login.html"));
 });
 
-// Logout
 router.get("/logout", (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -31,7 +27,6 @@ router.get("/logout", (req, res) => {
     });
 });
 
-// Login POST
 router.post("/login", async (req, res) => {
     try {
         const hashedPassword = hashPassword(req.body.password);
@@ -57,7 +52,6 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// Signup POST
 router.post("/signup", async (req, res) => {
     try {
         const existingUser = await User.findOne({ email: req.body.email });

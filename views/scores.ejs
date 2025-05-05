@@ -20,6 +20,10 @@
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
             --table-even-row: #283548;
             --table-hover: #2d3a4f;
+            --detail-bg: #2a3441;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --danger-bg: rgba(239, 68, 68, 0.1);
         }
         
         * {
@@ -32,12 +36,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
-            min-height: 100vh;
         }
         
         .scores-container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px 0;
         }
@@ -113,11 +115,16 @@
             color: var(--text-color);
         }
         
-        tr:nth-child(even) {
+        tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        tr:nth-child(even):not(.submission-details) {
             background-color: var(--table-even-row);
         }
         
-        tr:hover {
+        tr:hover:not(.submission-details) {
             background-color: var(--table-hover);
         }
         
@@ -147,51 +154,160 @@
             color: #ef4444;
         }
         
+        .submission-details {
+            display: none;
+            background-color: var(--detail-bg);
+            border-bottom: 1px solid var(--input-border);
+            cursor: default;
+        }
+        
+        .submission-details td {
+            padding: 0;
+        }
+        
+        .details-container {
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--input-border);
+        }
+        
+        .student-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .student-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .student-email {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .score-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .high-score-badge {
+            background-color: var(--success-bg);
+            color: #10b981;
+        }
+        
+        .medium-score-badge {
+            background-color: var(--warning-bg);
+            color: #f59e0b;
+        }
+        
+        .low-score-badge {
+            background-color: var(--danger-bg);
+            color: #ef4444;
+        }
+        
         .qa-list {
             list-style-type: none;
             padding: 0;
         }
         
         .qa-item {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--input-border);
+            background-color: var(--input-bg);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+        
+        .qa-item:hover {
+            transform: translateY(-2px);
         }
         
         .qa-item:last-child {
             margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
         }
         
         .question-label {
             display: inline-block;
             background-color: var(--primary-color);
             color: white;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
-            margin-right: 6px;
+            margin-right: 10px;
             font-size: 12px;
+            font-weight: bold;
         }
         
         .question-text {
             display: block;
-            margin: 5px 0;
+            margin-bottom: 12px;
             font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .answer-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
         }
         
         .answer-label {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-right: 5px;
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
         }
         
         .answer-text {
             font-style: italic;
+            line-height: 1.6;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 13px;
         }
         
         .responsive-table {
             overflow-x: auto;
+        }
+        
+        .chevron-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .expanded .chevron-icon {
+            transform: rotate(180deg);
         }
         
         @media screen and (max-width: 768px) {
@@ -209,6 +325,16 @@
             
             .question-text {
                 font-size: 13px;
+            }
+            
+            .details-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .score-badge {
+                align-self: flex-start;
             }
         }
     </style>
@@ -235,32 +361,62 @@
                             <tr>
                                 <th><i class="fas fa-envelope"></i> Email</th>
                                 <th><i class="fas fa-hashtag"></i> Test Code</th>
-                                <th><i class="fas fa-question-circle"></i> Questions & Answers</th>
                                 <th><i class="fas fa-chart-bar"></i> Marks</th>
+                                <th><i class="fas fa-clock"></i> Time Taken</th>
+                                <th><i class="fas fa-calendar"></i> Submitted</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% submissions.forEach(submission => { %>
-                                <tr>
-                                    <td class="email-cell"><%= submission.email %></td>
-                                    <td class="code-cell"><%= submission.code %></td>
-                                    <td>
-                                        <ul class="qa-list">
-                                            <% submission.question.forEach((question, index) => { %>
-                                                <li class="qa-item">
-                                                    <span class="question-label">Q<%= index + 1 %></span>
-                                                    <span class="question-text"><%= question %></span>
-                                                    <span class="answer-label">Answer:</span>
-                                                    <span class="answer-text"><%= submission.answer[index] %></span>
-                                                </li>
-                                            <% }) %>
-                                        </ul>
-                                    </td>
+                            <% submissions.forEach((submission, index) => { %>
+                                <tr class="submission-row" data-index="<%= index %>">
+                                    <td class="email-cell"><%= submission.student.email %> <i class="fas fa-chevron-down chevron-icon"></i></td>
+                                    <td class="code-cell"><%= test.code %></td>
                                     <td class="marks-cell 
                                         <% if (submission.marks >= 80) { %>high-score<% } 
                                            else if (submission.marks >= 50) { %>medium-score<% } 
                                            else { %>low-score<% } %>">
                                         <%= submission.marks %>%
+                                    </td>
+                                    <td><%= submission.timeTaken ? Math.floor(submission.timeTaken / 60) + ' min ' + (submission.timeTaken % 60) + ' sec' : 'N/A' %></td>
+                                    <td><%= new Date(submission.createdAt).toLocaleDateString() %></td>
+                                </tr>
+                                <tr class="submission-details" id="details-<%= index %>">
+                                    <td colspan="5">
+                                        <div class="details-container">
+                                            <div class="details-header">
+                                                <div class="student-info">
+                                                    <span class="student-name"><%= submission.student.name || 'Student' %></span>
+                                                    <span class="student-email"><%= submission.student.email %></span>
+                                                </div>
+                                                <div class="score-badge 
+                                                    <% if (submission.marks >= 80) { %>high-score-badge<% } 
+                                                       else if (submission.marks >= 50) { %>medium-score-badge<% } 
+                                                       else { %>low-score-badge<% } %>">
+                                                    <i class="fas fa-chart-bar"></i>
+                                                    Score: <%= submission.marks %>%
+                                                </div>
+                                            </div>
+                                            
+                                            <ul class="qa-list">
+                                                <% submission.question.forEach((question, qIndex) => { %>
+                                                    <li class="qa-item">
+                                                        <div class="question-header">
+                                                            <span class="question-label">Question <%= qIndex + 1 %></span>
+                                                        </div>
+                                                        <span class="question-text"><%= question %></span>
+                                                        <div class="answer-section">
+                                                            <span class="answer-label">Student's Answer:</span>
+                                                            <span class="answer-text"><%= submission.answer[qIndex] %></span>
+                                                        </div>
+                                                    </li>
+                                                <% }) %>
+                                            </ul>
+                                            
+                                            <div class="meta-info">
+                                                <span><i class="fas fa-clock"></i> Time Taken: <%= submission.timeTaken ? Math.floor(submission.timeTaken / 60) + ' min ' + (submission.timeTaken % 60) + ' sec' : 'N/A' %></span>
+                                                <span><i class="fas fa-calendar"></i> Submitted: <%= new Date(submission.createdAt).toLocaleString() %></span>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -272,9 +428,29 @@
     </div>
 
     <script>
-        // Optional script to add additional functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // You could add sorting functionality, filtering, or export options here
+            const submissionRows = document.querySelectorAll('.submission-row');
+            
+            submissionRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    const detailsRow = document.getElementById(`details-${index}`);
+                    
+                    const isExpanded = this.classList.contains('expanded');
+                    
+                    submissionRows.forEach(r => {
+                        const idx = r.getAttribute('data-index');
+                        const dr = document.getElementById(`details-${idx}`);
+                        r.classList.remove('expanded');
+                        dr.style.display = 'none';
+                    });
+                    
+                    if (!isExpanded) {
+                        this.classList.add('expanded');
+                        detailsRow.style.display = 'table-row';
+                    }
+                });
+            });
         });
     </script>
 </body>

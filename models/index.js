@@ -34,7 +34,16 @@ const testSchema = new Schema({
         type: Number,
         required: true
     },
-    questions: [String],
+    questions: [{
+        id: String,
+        question: String,
+        answer: String,
+        type: {
+            type: String,
+            enum: ['1-marker', '2-marker', '5-marker']
+        },
+        marks: Number
+    }],
     teacher: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -49,6 +58,13 @@ const testSchema = new Schema({
         type: String,
         enum: ['Active', 'Inactive'],
         default: 'Inactive'
+    },
+    totalMarks: {
+        type: Number
+    },
+    testDuration: {
+        type: Number, 
+        required: false
     }
 }, { timestamps: true });
 
@@ -66,7 +82,11 @@ const submissionSchema = new Schema({
     },
     question: [String],
     answer: [String],
-    marks: String
+    marks: String,
+    timeTaken: {
+        type: Number, 
+        required: false
+    }
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
