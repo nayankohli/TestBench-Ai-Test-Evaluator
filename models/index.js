@@ -89,6 +89,26 @@ const submissionSchema = new Schema({
     }
 }, { timestamps: true });
 
+const tempUserSchema = new mongoose.Schema({
+  name: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: String,
+  role: String,
+  otp: String,
+  otpExpiry: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 3600 
+  }
+});
+
+const TempUser = mongoose.model('TempUser', tempUserSchema);
+
 const User = mongoose.model('User', userSchema);
 const Test = mongoose.model('Test', testSchema);
 const Submission = mongoose.model('Submission', submissionSchema);
@@ -96,5 +116,6 @@ const Submission = mongoose.model('Submission', submissionSchema);
 module.exports = {
     User,
     Test,
-    Submission
+    Submission,
+    TempUser
 };
